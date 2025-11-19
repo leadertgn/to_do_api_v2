@@ -1,0 +1,32 @@
+{
+  "name": "to_do_api_v2",
+  "version": "1.0.0",
+  "description": "Professionnal backend of To Do List ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon run server.js",
+    "start":"node run server.js"
+  },
+  "keywords": [
+    "Api",
+    "MongoDb",
+    "backend",
+    "Express",
+    "Node.js"
+  ],
+  "author": "Leadertgn",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.4"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.1"
+  }
+}
