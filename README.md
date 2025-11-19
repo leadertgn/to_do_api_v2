@@ -54,7 +54,7 @@ L’API utilise une **architecture par couches**, afin d’améliorer la modular
 ### 📝 1. Cloner le projet
 
 ```bash
-git clone <url-du-repo>
+git clone https://github.com/leadertgn/to_do_api_v2
 cd to_do_api_v2
 ```
 
