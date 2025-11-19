@@ -30,16 +30,18 @@ Ce projet utilise l’écosystème Node.js et les outils modernes suivants :
 ## 🏗️ 3. Architecture du Projet
 
 L’API utilise une **architecture par couches**, afin d’améliorer la modularité, les tests et la maintenabilité long terme :
-src/
-├── config/             # Connexion DB & configurations
-├── controllers/        # Gestion des requêtes et réponses
-├── middlewares/        # Auth, validations, gestion des erreurs
-├── models/             # Schémas Mongoose
-├── routes/             # Endpoints et association aux controllers
-├── services/           # Logique métier (cœur du backend)
-├── utils/              # Fonctions utilitaires
-├── app.js              # Configuration Express
-└── server.js           # Lancement du serveur
+```bash
+  src/
+    ├── config/             # Connexion DB & configurations
+    ├── controllers/        # Gestion des requêtes et réponses
+    ├── middlewares/        # Auth, validations, gestion des erreurs
+    ├── models/             # Schémas Mongoose
+    ├── routes/             # Endpoints et association aux controllers
+    ├── services/           # Logique métier (cœur du backend)
+    ├── utils/              # Fonctions utilitaires
+    ├── app.js              # Configuration Express
+  └── server.js           # Lancement du serveur
+```
 
 ## ⚙️ 4. Installation & Configuration
 
