@@ -13,7 +13,7 @@ const app = express();
 app.use(morgan("dev")) // morgan 
 app.use(cors()) // cors
 app.use(express.json()); // Json parser 
-app.use(express.urlencoded({ urlencoded:true })); // URL-encoded Parser
+app.use(express.urlencoded({ extended:true })); // URL-encoded Parser
 // COnfiguration des Headers par défaut (Sécurité et Cache) 
 app.use((req,res,next) => {
     // Empêche le navigateur de mettre en cache les reponses de l'API
@@ -27,7 +27,7 @@ app.use((req,res,next) => {
 });
 
 // 3. Attachement des Routeurs de version
-app.use('/api/v1',routes.v1Routes);
+app.use('/api/v1',routes.v1Routes); // Version 1
 
 // 4. Gestion des Erreurs ---
 
@@ -40,13 +40,12 @@ app.use((req,res,next) => {
 
 // Gestionnaire d'erreurs général
 app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        succes:false,
-        error: {
-            message: error.message || 'Erreur interne du serveur',
-            status: error.status || 500
-        }
+    res.status(error.status || 500).json({
+            success:false,
+            error: {
+                message: error.message || 'Erreur interne du serveur',
+                status: error.status || 500
+            }
     });
 });
 

@@ -1,112 +1,86 @@
 # 🚀 TO DO API V2 – Backend (Node.js / Express / MongoDB)
 
 ![Badge Licence](https://img.shields.io/badge/License-MIT-blue.svg)
-![Badge Statut](https://img.shields.io/badge/Statut-Initialisation%20Termin%C3%A9e-green.svg)
+![Badge Statut](https://img.shields.io/badge/Statut-Commit%202%20-%20Base%20Backend%20Op%C3%A9rationnelle-green)
 
-> Un backend professionnel, robuste et évolutif, conçu pour une application de gestion de tâches complète avec authentification sécurisée. Ce projet sert de **démonstration de compétences avancées en MERN Stack**.
+> Deuxième étape de construction du backend : mise en place des controllers, des services, et du gestionnaire global des erreurs asynchrones.  
+> Toute la logique métier du registre utilisateur est désormais déplacée dans `authService.js`, conformément aux bonnes pratiques d’architecture.
 
-## 🎯 1. Objectifs du Projet
+## 🎯 1. Objectifs du Commit 2
 
-Ce projet a été développé pour servir de base à une application de gestion de tâches personnelle, en mettant l’accent sur les meilleures pratiques de développement backend :
+Ce commit consolide la base du backend en introduisant :
 
-* Construire une **API backend robuste et scalable**.
-* Implémenter une **architecture professionnelle** (controllers, services, models…).
-* Intégrer une **authentification sécurisée** (JWT, vérification d’email).
-* Proposer un **CRUD complet** pour la gestion des tâches.
-* Servir de **projet portfolio** pour démontrer les compétences backend MERN stack.
+- La séparation **controllers / services**
+- Le déplacement de la logique `register` dans `authService.js`
+- L’ajout du gestionnaire global d’opérations asynchrones
+- Une organisation plus professionnelle et scalable
+- Les conventions temporaires de réponses pour les tests internes
+- La préparation du système d’authentification complet
 
-## 📦 2. Technologies Utilisées
+## 📦 2. Nouveautés du Commit 2
 
-Ce projet utilise l’écosystème Node.js et les outils modernes suivants :
+### 🔁 1. Mise en place du `asyncHandler`
 
-| Catégorie           | Technologies                 | Description                                                   |
-| ------------------- | ---------------------------- | ------------------------------------------------------------- |
-| **Frameworks**      | Node.js, Express.js          | Environnement d'exécution et framework minimaliste pour l'API |
-| **Base de Données** | MongoDB, Mongoose            | Base NoSQL et ODM pour la modélisation                        |
-| **Développement**   | Nodemon, Morgan              | Redémarrage auto & logging HTTP                               |
-| **Qualité**         | ESLint, Prettier (optionnel) | Qualité et cohérence du code                                  |
-| **Sécurité**        | dotenv, CORS                 | Variables d'environnement & politique de partage              |
+Le backend utilise désormais un système global pour gérer les fonctions asynchrones.  
+Cela permet :
 
-## 🏗️ 3. Architecture du Projet
+- d'éviter la répétition de blocs `try/catch`,
+- de standardiser la gestion d’erreurs,
+- de faciliter le futur middleware d’erreur.
 
-L’API utilise une **architecture par couches**, afin d’améliorer la modularité, les tests et la maintenabilité long terme :
-```bash
-  src/
-    ├── config/             # Connexion DB & configurations
-    ├── controllers/        # Gestion des requêtes et réponses
-    ├── middlewares/        # Auth, validations, gestion des erreurs
-    ├── models/             # Schémas Mongoose
-    ├── routes/             # Endpoints et association aux controllers
-    ├── services/           # Logique métier (cœur du backend)
-    ├── utils/              # Fonctions utilitaires
-    ├── app.js              # Configuration Express
-  └── server.js           # Lancement du serveur
+Ce gestionnaire est centralisé dans `utils/`.
+
+### 🧠 2. Déplacement de la logique `register` dans `authService.js`
+
+Toute la logique métier de l'inscription utilisateur est gérée par un **service dédié**, conformément aux bonnes pratiques :
+
+- séparation claire des responsabilités (controller vs service),
+- code plus lisible, testable et évolutif,
+- préparation de la future logique d’authentification (vérification email, login, JWT).
+
+Le controller devient minimal, le service contient la logique.
+
+### 🎛️ 3. Controllers simplifiés
+
+Les controllers ont désormais un rôle clair :
+
+- recevoir la requête,
+- transmettre au service,
+- renvoyer la réponse.
+
+Ils ne contiennent plus de logique métier.
+
+### 📡 4. Politique  des Codes HTTP
+
+Durant cette phase :
+
+- toutes les réponses côté serveur renvoient des codes **HTTP propres**
+- les détails de l’erreur sont inclus dans l’objet JSON (`error.status`, `error.message`).
+Cela facilite les tests initiaux.
+
+## 🏗️ 3. Architecture Mise à Jour
+
+```src/
+├── config/ # Connexion et configurations
+├── controllers/ # Reçoit la requête, délègue aux services
+├── middlewares/ # Auth, validation, gestion des erreurs
+├── models/ # Schémas Mongoose
+├── routes/ # Définition des routes de l’API
+├── services/ # Logique métier (dont authService.js)
+├── utils/ # asyncHandler, helpers...
+├── app.js # Configuration Express
+└── server.js # Point d’entrée du serveur
 ```
 
-## ⚙️ 4. Installation & Configuration
+## 📡 4. Routes Disponibles
 
-### 🔧 Prérequis
-
-* Node.js (version LTS recommandée)
-* npm
-* MongoDB (local ou MongoDB Atlas)
-
-### 📝 1. Cloner le projet
-
-```bash
-git clone https://github.com/leadertgn/to_do_api_v2
-cd to_do_api_v2
-```
-
-### 📥 2. Installer les dépendances
-
-```bash
-npm install
-```
-
-### 🔐 3. Variables d’Environnement
-
-Créer un fichier **.env** à la racine :
-
-```env
-# Configuration du serveur
-PORT=5000
-
-# Connexion MongoDB
-MONGO_URI=your_mongo_connection_string
-
-# Sécurité JWT
-JWT_SECRET=your_jwt_secret_key
-
-# Configuration Email (vérification)
-EMAIL_USER=your_email
-EMAIL_PASS=your_email_password
-EMAIL_VERIFICATION_EXPIRATION=10
-```
-
-## ▶️ 5. Lancer le Projet
-
-### 💻 Mode Développement (Nodemon)
-
-```bash
-npm run dev
-```
-
-### 🏭 Mode Production
-
-```bash
-npm start
-```
-
-## 📡 6. Documentation des Routes
-
-### ✔️ Route opérationnelle actuellement disponible
+### ✔️ GET `/api/v1/health`
 
 | Méthode | Endpoint       | Description                                  |
 | ------- | -------------- | -------------------------------------------- |
 | GET     | /api/v1/health | Vérifie l’état du serveur et la connexion DB |
 
-#### Exemple de réponse (GET `/api/v1/health`)
+**Exemple de réponse :**
 
 ```json
 {
@@ -114,38 +88,28 @@ npm start
   "status": "OK"
 }
 ```
+🧭 5. Roadmap (prochaines étapes)
+🔐 Phase 3 – Authentification
+Finalisation complète du système d’inscription
 
-## 📌 Fonctionnalités Prévues (Roadmap)
+Vérification email
 
-### 🔐 Authentification
+Connexion + génération de tokens JWT
 
-| Méthode | Endpoint              | Description                      |
-| ------- | --------------------- | -------------------------------- |
-| POST    | /api/v1/auth/register | Inscription + vérification email |
-| POST    | /api/v1/auth/login    | Connexion & génération JWT       |
+Middleware de protection des routes
 
-### 🗂️ Gestion des Tâches
+🗂️ Phase 4 – CRUD des Tâches
+Création
 
-| Méthode | Endpoint             | Description              |
-| ------- | -------------------- | ------------------------ |
-| POST    | /api/v1/tasks        | Création d’une tâche     |
-| GET     | /api/v1/tasks?page=1 | Liste paginée des tâches |
-| PUT     | /api/v1/tasks/:id    | Mise à jour d’une tâche  |
-| DELETE  | /api/v1/tasks/:id    | Suppression d’une tâche  |
+Lecture paginée
 
-## 📘 7. À Propos du Développement
+Mise à jour
 
-Le projet suit une approche professionnelle :
+Suppression
 
-* Architecture claire : **services / controllers**
-* Commits structurés étape par étape
-* Documentation continue
-* Base évolutive vers une application MERN complète
+👨‍💻 Auteur
+TOGNON EMERIC R. S.
+Développeur Backend (MERN) et systèmes embarqués & Étudiant en génie électrique et informatique
+Passionné par le développement logiciel robuste et structuré.
 
-## 👨‍💻 8. Auteur
-
-**TOGNON EMERIC**
-**Rôle :** Développeur Backend / Étudiant MERN Stack
-**Objectif :** Apprentissage & consolidation des bonnes pratiques backend
-
-> Ce fichier README représente le **Commit 1**, dédié à la mise en place de l’environnement technique initial.
+Ce fichier README correspond au Commit 2, dédié à l’introduction des services, des controllers structurés et de la gestion asynchrone.Les erreurs seront unifiées et centralisées dans un middleware errorHandler lors du commit suivant.
