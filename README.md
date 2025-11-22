@@ -17,23 +17,23 @@ Ce commit consolide la base du backend en introduisant :
 - Les conventions temporaires de réponses pour les tests internes
 - La préparation du système d’authentification complet
 
+---
+
 ## 📦 2. Nouveautés du Commit 2
 
 ### 🔁 1. Mise en place du `asyncHandler`
-
 Le backend utilise désormais un système global pour gérer les fonctions asynchrones.  
 Cela permet :
-
 - d'éviter la répétition de blocs `try/catch`,
 - de standardiser la gestion d’erreurs,
 - de faciliter le futur middleware d’erreur.
 
 Ce gestionnaire est centralisé dans `utils/`.
 
+---
+
 ### 🧠 2. Déplacement de la logique `register` dans `authService.js`
-
 Toute la logique métier de l'inscription utilisateur est gérée par un **service dédié**, conformément aux bonnes pratiques :
-
 - séparation claire des responsabilités (controller vs service),
 - code plus lisible, testable et évolutif,
 - préparation de la future logique d’authentification (vérification email, login, JWT).
@@ -41,53 +41,51 @@ Toute la logique métier de l'inscription utilisateur est gérée par un **servi
 Le controller devient minimal, le service contient la logique.
 
 ### 🎛️ 3. Controllers simplifiés
-
 Les controllers ont désormais un rôle clair :
-
 - recevoir la requête,
 - transmettre au service,
 - renvoyer la réponse.
 
 Ils ne contiennent plus de logique métier.
 
-### 📡 4. Politique  des Codes HTTP
-
+### 📡 4. Politique des Codes HTTP
 Durant cette phase :
-
-- toutes les réponses côté serveur renvoient des codes **HTTP propres**
+- toutes les réponses côté serveur renvoient des **codes HTTP propres** (`200`, `400`, etc.),
 - les détails de l’erreur sont inclus dans l’objet JSON (`error.status`, `error.message`).
-Cela facilite les tests initiaux.
+
+Cela facilite les tests initiaux et prépare une API professionnelle conforme aux standards REST.
 
 ## 🏗️ 3. Architecture Mise à Jour
 
-```src/
-├── config/ # Connexion et configurations
-├── controllers/ # Reçoit la requête, délègue aux services
-├── middlewares/ # Auth, validation, gestion des erreurs
-├── models/ # Schémas Mongoose
-├── routes/ # Définition des routes de l’API
-├── services/ # Logique métier (dont authService.js)
-├── utils/ # asyncHandler, helpers...
-├── app.js # Configuration Express
-└── server.js # Point d’entrée du serveur
+```bash
+src/
+├── config/        # Connexion et configurations
+├── controllers/   # Reçoit la requête, délègue aux services
+├── middlewares/   # Auth, validation, gestion des erreurs
+├── models/        # Schémas Mongoose
+├── routes/        # Définition des routes de l’API
+├── services/      # Logique métier (dont authService.js)
+├── utils/         # asyncHandler, helpers...
+├── app.js         # Configuration Express
+└── server.js      # Point d’entrée du serveur
 ```
 
-## 📡 4. Routes Disponibles
+📡 4. Routes Disponibles
+Méthode	|Endpoint              |	Description                                           |
+GET	    |/api/v1/health	       |Vérifie l’état du serveur et la connexion DB            |
+POST	  |/api/v1/auth/register |	Inscription utilisateur + génération code vérification|
 
-### ✔️ GET `/api/v1/health`
-
-| Méthode | Endpoint       | Description                                  |
-| ------- | -------------- | -------------------------------------------- |
-| GET     | /api/v1/health | Vérifie l’état du serveur et la connexion DB |
-
-**Exemple de réponse :**
+### Exemple de réponse (POST /api/v1/auth/register)
 
 ```json
 {
-  "message": "Bienvenu sur la version 1 de l'api. Le service est opérationnel.",
-  "status": "OK"
-}
-```
+  "success": true,
+  "data": {
+    "username": "nouvel_utilisateur",
+    "email": "email@test.com"
+  }
+}```
+
 🧭 5. Roadmap (prochaines étapes)
 🔐 Phase 3 – Authentification
 Finalisation complète du système d’inscription
@@ -108,8 +106,6 @@ Mise à jour
 Suppression
 
 👨‍💻 Auteur
-TOGNON EMERIC R. S.
-Développeur Backend (MERN) et systèmes embarqués & Étudiant en génie électrique et informatique
-Passionné par le développement logiciel robuste et structuré.
+TOGNON EMERIC R. S. Développeur Backend (MERN) et systèmes embarqués Étudiant en génie électrique et informatique Passionné par le développement logiciel robuste et structuré.
 
-Ce fichier README correspond au Commit 2, dédié à l’introduction des services, des controllers structurés et de la gestion asynchrone.Les erreurs seront unifiées et centralisées dans un middleware errorHandler lors du commit suivant.
+ℹ️ Ce fichier README correspond au Commit 2, dédié à l’introduction des services, des controllers structurés et de la gestion asynchrone. Les erreurs seront unifiées et centralisées dans un middleware errorHandler lors du commit suivant.
